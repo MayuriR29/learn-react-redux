@@ -1,26 +1,38 @@
 import React, { Component } from "react";
 import "./App.css";
-import Display from "./Display/Display";
-import ReduxDemo from "./ReduxDemo/ReduxDemo";
+import { connect } from "react-redux";
+import { updateUser } from "./actions/usersActions";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      names: ["A", "C", "B", "D"],
-      inputValue: ""
-    };
-  }
+  onUpdateUser = event => {
+    this.props.onUpdateUser(event.target.value);
+  };
+
   render() {
+    console.log(this.props);
     return (
-      <div className="App">
-        <Display displayName={this.state.names} />
-        <ReduxDemo />
-        <button>Add more names</button>
-        <input />
+      <div>
+        <input onChange={this.onUpdateUser} />
+        {this.props.users}
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state, props) => {
+  console.log(props);
+  return {
+    products: state.product,
+    users: state.user,
+    userPlusProp: `${state.user} ${props.randomProps}`
+  };
+};
+
+const mapActiosToProps = {
+  onUpdateUser: updateUser
+};
+
+export default connect(
+  mapStateToProps,
+  mapActiosToProps
+)(App);
